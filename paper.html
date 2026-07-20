@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>FunMusic Technical Report</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #657087;
+      --line: #dfe4ed;
+      --accent: #3157d5;
+      --paper: #ffffff;
+      --canvas: #f4f6fa;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 68px;
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 2px 16px rgba(25, 39, 75, 0.06);
+    }
+
+    .identity { min-width: 0; }
+
+    h1 {
+      margin: 0;
+      overflow: hidden;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(18px, 2vw, 25px);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .byline {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    .open-pdf {
+      flex: 0 0 auto;
+      padding: 9px 14px;
+      border: 1px solid #2748ba;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--accent);
+      font-size: 13px;
+      font-weight: 650;
+      text-decoration: none;
+      box-shadow: 0 3px 10px rgba(49, 87, 213, 0.18);
+    }
+
+    .open-pdf:hover { background: #2748ba; }
+
+    main {
+      flex: 1;
+      min-height: 0;
+      padding: 14px;
+    }
+
+    .viewer {
+      width: min(100%, 1440px);
+      height: 100%;
+      margin: 0 auto;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+      box-shadow: 0 8px 30px rgba(25, 39, 75, 0.09);
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: var(--paper);
+    }
+
+    @media (max-width: 640px) {
+      header { min-height: 60px; padding: 10px 12px; }
+      main { padding: 6px; }
+      .viewer { border-radius: 6px; }
+      .open-pdf { padding: 8px 10px; }
+      .byline { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="identity">
+      <h1>FunMusic Technical Report</h1>
+      <div class="byline">Qwen Audio Team</div>
+    </div>
+    <a class="open-pdf" href="paper.pdf" target="_blank" rel="noopener">Open PDF</a>
+  </header>
+  <main>
+    <div class="viewer">
+      <iframe title="FunMusic Technical Report PDF" src="paper.pdf#view=FitH">
+        <p>Your browser cannot display embedded PDFs. <a href="paper.pdf">Open the PDF directly.</a></p>
+      </iframe>
+    </div>
+  </main>
+</body>
+</html>
