@@ -79,6 +79,20 @@ body.layout-three .cover-pair{width:calc(66.666667% - 4.666667px)}
 .cover-member-genre{display:block;max-height:2.2em;overflow:hidden;color:var(--ink);font-family:"Source Serif 4",serif;font-size:clamp(15px,1.3vw,20px);font-weight:400;line-height:1.08;letter-spacing:-.018em;overflow-wrap:normal;word-break:normal;white-space:normal;text-wrap:balance}
 .cover-member-play{position:absolute;z-index:2;top:50%;right:13px;display:grid;place-items:center;width:44px;height:44px;border:1px solid rgba(255,255,255,.7);border-radius:50%;color:#fff;background:rgba(36,42,78,.54);box-shadow:0 5px 18px rgba(5,7,20,.16);font-size:12px;text-indent:2px;transform:translateY(-50%);transition:background-color .16s,transform .16s}
 .cover-member:hover .cover-member-play,.cover-member.is-current .cover-member-play{background:var(--brand-blue)}
+.album-cover,.cover-member-art{transition:filter .3s ease,opacity .3s ease,transform .16s}
+.album-card[data-audio-state="queued"],.album-card[data-audio-state="loading"],.cover-member[data-audio-state="queued"],.cover-member[data-audio-state="loading"]{border-color:rgba(28,31,48,.08);box-shadow:0 3px 12px rgba(27,32,62,.035);cursor:progress}
+.album-card[data-audio-state="error"],.cover-member[data-audio-state="error"]{border-color:rgba(195,59,86,.2);box-shadow:0 3px 12px rgba(105,30,48,.04);cursor:pointer}
+[data-audio-state="queued"] .album-cover,[data-audio-state="loading"] .album-cover,[data-audio-state="error"] .album-cover,[data-audio-state="queued"] .cover-member-art,[data-audio-state="loading"] .cover-member-art,[data-audio-state="error"] .cover-member-art{filter:grayscale(.88) saturate(.22);opacity:.48}
+[data-audio-state="queued"] .card-play,[data-audio-state="loading"] .card-play,[data-audio-state="error"] .card-play,[data-audio-state="queued"] .cover-member-play,[data-audio-state="loading"] .cover-member-play,[data-audio-state="error"] .cover-member-play{visibility:hidden;opacity:0}
+[data-audio-state="queued"] .cover-member-copy,[data-audio-state="loading"] .cover-member-copy,[data-audio-state="error"] .cover-member-copy{width:calc(100% - 110px)}
+.card-resource-state{position:absolute;z-index:3;top:50%;right:13px;display:inline-flex;align-items:center;gap:6px;min-height:30px;border:1px solid rgba(69,73,96,.14);border-radius:999px;padding:0 10px;color:#5f6372;background:rgba(255,255,255,.9);box-shadow:0 3px 12px rgba(27,32,62,.07);font-size:10px;font-weight:650;line-height:1;letter-spacing:.02em;pointer-events:none;transform:translateY(-50%);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.card-resource-state[hidden]{display:none}
+.card-resource-state::before{content:"";width:7px;height:7px;border-radius:50%;background:#a0a3af;flex:0 0 auto}
+[data-audio-state="loading"] .card-resource-state::before{width:9px;height:9px;border:2px solid rgba(97,92,237,.22);border-top-color:var(--brand-violet);background:transparent;animation:resource-state-spin .8s linear infinite}
+[data-audio-state="error"] .card-resource-state{border-color:rgba(195,59,86,.25);color:#9f2440;background:rgba(255,244,247,.94)}
+[data-audio-state="error"] .card-resource-state::before{content:"!";display:grid;place-items:center;width:13px;height:13px;color:#fff;background:#c33b56;font-size:9px;font-weight:750}
+@keyframes resource-state-spin{to{transform:rotate(1turn)}}
+@media(max-width:719px){.card-resource-state{right:11px}}
 .cover-direction{display:flex;align-items:center;justify-content:center;width:14px;color:#666b7f;font-size:15px;line-height:1;pointer-events:none;user-select:none}
 .cover-nojs-audio{display:flex;align-items:center;min-height:44px;margin:7px 0 12px;padding:0 2px;color:var(--brand-blue);font-size:11px;overflow-wrap:anywhere}
 .record-dialog{width:min(1180px,calc(100vw - 48px));height:min(820px,calc(100dvh - 48px));max-width:none;max-height:none;overflow:hidden;border:1px solid rgba(35,35,38,.12);border-radius:20px;padding:0;color:var(--ink);color-scheme:light;background-color:var(--dialog);background-image:linear-gradient(135deg,#fff 0,#f5f6fb 100%);box-shadow:0 30px 90px rgba(26,31,52,.22),0 2px 10px rgba(26,31,52,.06)}
@@ -390,6 +404,8 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
 .player-boot-copy{display:grid;gap:3px;min-width:0}
 .player-boot-title{font-size:14px;font-weight:650;line-height:1.35}
 .player-boot-detail{color:#666977;font-size:12px;line-height:1.45}
+.player-boot-progress{grid-column:2;display:block;height:4px;overflow:hidden;margin-top:5px;border-radius:999px;background:rgba(97,92,237,.13)}
+.player-boot-progress-fill{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--brand-blue),var(--brand-violet));transition:width .22s ease}
 .player-boot-reload {
   grid-column:2;
   justify-self:start;
@@ -415,6 +431,8 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
   animation:none;
 }
 .player-boot-overlay.is-error .player-boot-spinner::before{content:"!";font-size:15px;font-weight:750}
+.resource-toast{position:fixed;z-index:110;left:50%;bottom:max(24px,env(safe-area-inset-bottom));max-width:min(440px,calc(100vw - 32px));border:1px solid rgba(31,35,58,.13);border-radius:999px;padding:10px 16px;color:#30333f;background:rgba(255,255,255,.96);box-shadow:0 12px 36px rgba(28,33,64,.16);font-size:12px;font-weight:600;line-height:1.35;text-align:center;opacity:0;pointer-events:none;transform:translate(-50%,8px);transition:opacity .18s ease,transform .18s ease}
+.resource-toast.is-visible{opacity:1;transform:translate(-50%,0)}
 #demo-content[aria-busy="true"] .album-card,
 #demo-content[aria-busy="true"] .cover-member{pointer-events:none;cursor:wait}
 @keyframes player-boot-spin{to{transform:rotate(1turn)}}
@@ -422,6 +440,8 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
 @media(prefers-reduced-motion:reduce) {
   .player-boot-overlay{transition:none}
   .player-boot-spinner{animation:none}
+  .player-boot-progress-fill,.resource-toast,.album-cover,.cover-member-art{transition:none}
+  [data-audio-state="loading"] .card-resource-state::before{animation:none}
 
   .synced-lyrics .lyric-line {
     transition:none;
@@ -446,21 +466,26 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
     <div class="player-boot-card">
       <span class="player-boot-spinner" aria-hidden="true"></span>
       <span class="player-boot-copy">
-        <strong class="player-boot-title" id="player-boot-title">Loading audio player…</strong>
-        <span class="player-boot-detail" id="player-boot-detail">The demos will be ready in a moment.</span>
+        <strong class="player-boot-title" id="player-boot-title">Preparing your first demos…</strong>
+        <span class="player-boot-detail" id="player-boot-detail">0 / 3 audio demos ready</span>
       </span>
+      <span class="player-boot-progress" aria-hidden="true"><span class="player-boot-progress-fill" id="player-boot-progress-fill"></span></span>
       <button class="player-boot-reload" id="player-boot-reload" type="button" hidden>Reload page</button>
     </div>
   </div>
+  <div class="resource-toast" id="resource-toast" role="status" aria-live="polite" aria-atomic="true"></div>
   <script>
   (() => {
     'use strict';
     const overlay = document.getElementById('player-boot-overlay');
     const title = document.getElementById('player-boot-title');
     const detail = document.getElementById('player-boot-detail');
+    const progressFill = document.getElementById('player-boot-progress-fill');
     const reload = document.getElementById('player-boot-reload');
     let settled = false;
     let failed = false;
+    let progressReady = 0;
+    let progressNeeded = 3;
     let slowTimer = 0;
     let gateObserver = null;
     const gateContent = () => {
@@ -479,6 +504,27 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
       removeEventListener('unhandledrejection', onBootFailure);
     };
     const boot = {
+      progress(ready, needed = 3) {
+        if (settled) return;
+        if (title.textContent === 'Waiting to prepare audio…') title.textContent = 'Preparing your first demos…';
+        progressNeeded = Math.max(1, Number(needed) || 3);
+        progressReady = Math.max(0, Math.min(progressNeeded, Number(ready) || 0));
+        overlay.dataset.ready = String(progressReady);
+        overlay.dataset.needed = String(progressNeeded);
+        detail.textContent = `${progressReady} / ${progressNeeded} audio demos ready`;
+        progressFill.style.width = `${(progressReady / progressNeeded) * 100}%`;
+      },
+      waiting(message) {
+        if (settled) return;
+        title.textContent = 'Waiting to prepare audio…';
+        if (message) detail.textContent = message;
+      },
+      delayed(message) {
+        if (settled) return;
+        title.textContent = 'Audio preparation is taking longer than expected.';
+        detail.textContent = message || `${progressReady} / ${progressNeeded} audio demos ready. You can keep waiting or reload the page.`;
+        reload.hidden = false;
+      },
       ready() {
         if (settled) return;
         settled = true;
@@ -490,23 +536,26 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
           content.removeAttribute('inert');
           content.removeAttribute('aria-busy');
         }
+        progressFill.style.width = '100%';
         document.documentElement.classList.add('player-ready');
         setTimeout(() => { overlay.hidden = true; }, 180);
       },
-      fail() {
+      fail(titleMessage, detailMessage) {
         if (settled) return;
         settled = true;
         failed = true;
         clearTimeout(slowTimer);
         detachFailureListeners();
         overlay.classList.add('is-error');
-        title.textContent = 'The audio player could not start.';
-        detail.textContent = 'Reload the page to try again.';
+        title.textContent = titleMessage || 'The audio player could not start.';
+        detail.textContent = detailMessage || 'Reload the page to try again.';
         reload.hidden = false;
         gateContent();
       }
     };
-    const onBootFailure = () => boot.fail();
+    const onBootFailure = event => {
+      if (event.type === 'unhandledrejection' || (typeof ErrorEvent !== 'undefined' && event instanceof ErrorEvent)) boot.fail();
+    };
     window.__musicPageBoot = boot;
     if (typeof MutationObserver === 'function') {
       gateObserver = new MutationObserver(gateContent);
@@ -518,8 +567,7 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
     addEventListener('unhandledrejection', onBootFailure, {once:true});
     slowTimer = setTimeout(() => {
       if (settled) return;
-      title.textContent = 'Still loading the audio player…';
-      detail.textContent = 'The page is visible; playback will unlock as soon as the demo data is ready.';
+      if (title.textContent !== 'Waiting to prepare audio…') title.textContent = 'Still preparing your first demos…';
     }, 3500);
   })();
   </script>
@@ -2430,6 +2478,7 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
   let pendingPlayEpoch = 0;
   let desiredPlaying = false;
   let lyricsController = null;
+  let demoReadiness = null;
   const coverVisualLoaders = {player:null, ambient:null};
   const pendingPlayOwners = new Map();
   const cancelledPlayRequests = new Set();
@@ -2450,6 +2499,320 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
   const sameUrl = (left, right) => {
     try { return new URL(left, document.baseURI).href === new URL(right, document.baseURI).href; }
     catch (error) { return left === right; }
+  };
+  const createDemoReadiness = () => {
+    const boot = window.__musicPageBoot;
+    const toast = document.getElementById('resource-toast');
+    const elements = [...document.querySelectorAll('.album-card[data-track], .cover-pair[data-pair] .cover-member[data-role]')];
+    const byElement = new WeakMap();
+    const byUrl = new Map();
+    const entries = [];
+    const normaliseUrl = value => {
+      try { return new URL(value, document.baseURI).href; }
+      catch (error) { return String(value || ''); }
+    };
+    const describe = element => {
+      if (element.matches('.album-card[data-track]')) {
+        const track = tracks.get(element.dataset.track);
+        return {
+          item:track,
+          title:(element.querySelector('.album-title') || {}).textContent || element.getAttribute('aria-label') || 'Audio demo'
+        };
+      }
+      const pairNode = element.closest('.cover-pair[data-pair]');
+      const pair = pairNode ? coverPairs.get(pairNode.dataset.pair) : null;
+      const role = element.dataset.role;
+      const kind = (element.querySelector('.cover-member-kind') || {}).textContent || (role === 'cover' ? 'Cover' : 'Original');
+      const genre = (element.querySelector('.cover-member-genre') || {}).textContent || '';
+      return {item:pair && pair[role], title:`${kind}${genre ? ` · ${genre}` : ''}`};
+    };
+    for (const element of elements) {
+      const description = describe(element);
+      const statusNode = document.createElement('span');
+      statusNode.className = 'card-resource-state';
+      statusNode.setAttribute('aria-hidden', 'true');
+      element.append(statusNode);
+      const entry = {
+        element,
+        statusNode,
+        item:description.item,
+        title:description.title.trim(),
+        audioUrl:description.item && description.item.audio_url ? description.item.audio_url : '',
+        urlKey:description.item && description.item.audio_url ? normaliseUrl(description.item.audio_url) : '',
+        originalLabel:element.getAttribute('aria-label') || `Play ${description.title.trim()}`,
+        state:'queued',
+        requested:false
+      };
+      entries.push(entry);
+      byElement.set(element, entry);
+      if (entry.urlKey && !byUrl.has(entry.urlKey)) byUrl.set(entry.urlKey, entry);
+    }
+    const validEntries = entries.filter(entry => entry.audioUrl);
+    const needed = Math.min(3, validEntries.length);
+    let queue = validEntries.slice();
+    let activeProbe = null;
+    let probeEpoch = 0;
+    let foregroundEntry = null;
+    let pausedForForeground = false;
+    let foregroundTimer = 0;
+    let readyCount = 0;
+    let unlocked = false;
+    let startupFailures = 0;
+    let startupWatchdog = 0;
+    let toastTimer = 0;
+    const PROBE_TIMEOUT_MS = 20000;
+    const stateCopy = Object.freeze({queued:'Queued', loading:'Loading', error:'Retry'});
+    const setEntryState = (entry, nextState) => {
+      entry.state = nextState;
+      entry.element.dataset.audioState = nextState;
+      const waiting = nextState === 'queued' || nextState === 'loading';
+      if (waiting) entry.element.setAttribute('aria-busy', 'true');
+      else entry.element.removeAttribute('aria-busy');
+      entry.statusNode.hidden = nextState === 'ready';
+      entry.statusNode.textContent = stateCopy[nextState] || '';
+      if (nextState === 'ready') entry.element.setAttribute('aria-label', entry.originalLabel);
+      else if (nextState === 'queued') entry.element.setAttribute('aria-label', `${entry.title}. Audio queued; activate to load it now.`);
+      else if (nextState === 'loading') entry.element.setAttribute('aria-label', `${entry.title}. Audio loading.`);
+      else entry.element.setAttribute('aria-label', `${entry.title}. Audio failed to load; activate to retry.`);
+    };
+    const announce = message => {
+      if (!toast || !message) return;
+      clearTimeout(toastTimer);
+      toast.classList.remove('is-visible');
+      toast.textContent = '';
+      requestAnimationFrame(() => {
+        toast.textContent = message;
+        toast.classList.add('is-visible');
+        toastTimer = window.setTimeout(() => toast.classList.remove('is-visible'), 3200);
+      });
+    };
+    const removeQueued = entry => {
+      queue = queue.filter(candidate => candidate !== entry);
+    };
+    const enqueue = (entry, front = false) => {
+      if (!entry || !entry.audioUrl || entry.state === 'ready' || queue.includes(entry)) return;
+      if (front) queue.unshift(entry);
+      else queue.push(entry);
+    };
+    const cleanActiveProbe = () => {
+      if (!activeProbe) return null;
+      const snapshot = activeProbe;
+      activeProbe = null;
+      probeEpoch += 1;
+      clearTimeout(snapshot.timer);
+      for (const [type, listener] of snapshot.listeners) snapshot.media.removeEventListener(type, listener);
+      snapshot.media.removeAttribute('src');
+      snapshot.media.load();
+      return snapshot.entry;
+    };
+    const cancelProbe = ({requeue = false, front = false} = {}) => {
+      const entry = cleanActiveProbe();
+      if (entry && requeue && entry.state !== 'ready') {
+        setEntryState(entry, 'queued');
+        enqueue(entry, front);
+      }
+      return entry;
+    };
+    const updateBootProgress = () => {
+      if (boot && typeof boot.progress === 'function') boot.progress(Math.min(readyCount, needed), needed || 3);
+    };
+    const armStartupWatchdog = () => {
+      if (unlocked || startupWatchdog || navigator.onLine === false) return;
+      startupWatchdog = window.setTimeout(() => {
+        startupWatchdog = 0;
+        if (!unlocked && boot && typeof boot.delayed === 'function') boot.delayed();
+      }, 60000);
+    };
+    const maybeFinishWithoutEnough = () => {
+      if (unlocked || activeProbe || pausedForForeground || queue.length || readyCount >= needed) return;
+      if (boot) boot.fail('The first audio demos are not available yet.', 'Check your connection, then reload the page to try again.');
+    };
+    const pump = () => {
+      if (activeProbe || pausedForForeground) return;
+      if (navigator.onLine === false) {
+        if (!unlocked && boot && typeof boot.waiting === 'function') boot.waiting('Waiting for a network connection…');
+        return;
+      }
+      if (unlocked && document.hidden) return;
+      let entry = queue.shift();
+      while (entry && (entry.state === 'ready' || !entry.audioUrl)) entry = queue.shift();
+      if (!entry) {
+        maybeFinishWithoutEnough();
+        return;
+      }
+      setEntryState(entry, 'loading');
+      const image = entry.element.querySelector('.album-cover, .cover-member-art');
+      if (image) image.loading = 'eager';
+      const media = new Audio();
+      media.crossOrigin = 'anonymous';
+      media.preload = 'auto';
+      media.muted = true;
+      media.playsInline = true;
+      const epoch = ++probeEpoch;
+      const listeners = [];
+      const isCurrent = () => activeProbe && activeProbe.epoch === epoch && activeProbe.entry === entry;
+      const finish = success => {
+        if (!isCurrent()) return;
+        cleanActiveProbe();
+        if (success) markReady(entry);
+        else markError(entry);
+        window.setTimeout(pump, 0);
+      };
+      const ready = () => {
+        if (media.readyState >= 3) finish(true);
+      };
+      const failed = () => finish(false);
+      for (const type of ['canplay', 'loadeddata', 'progress', 'suspend']) {
+        media.addEventListener(type, ready);
+        listeners.push([type, ready]);
+      }
+      media.addEventListener('error', failed);
+      listeners.push(['error', failed]);
+      const timer = window.setTimeout(() => finish(media.readyState >= 3), PROBE_TIMEOUT_MS);
+      activeProbe = {entry, media, epoch, listeners, timer};
+      media.src = entry.audioUrl;
+      media.load();
+      ready();
+    };
+    const markReady = entry => {
+      if (!entry) return;
+      if (activeProbe && activeProbe.entry === entry) cleanActiveProbe();
+      removeQueued(entry);
+      if (entry.state !== 'ready') readyCount += 1;
+      setEntryState(entry, 'ready');
+      if (entry.requested) {
+        announce(`“${entry.title}” is ready to play.`);
+        entry.requested = false;
+      }
+      updateBootProgress();
+      if (!unlocked && needed >= 3 && readyCount >= needed) {
+        unlocked = true;
+        clearTimeout(startupWatchdog);
+        startupWatchdog = 0;
+        if (boot) boot.ready();
+      }
+      if (foregroundEntry === entry) {
+        clearTimeout(foregroundTimer);
+        foregroundTimer = 0;
+        foregroundEntry = null;
+        pausedForForeground = false;
+      }
+      window.setTimeout(pump, 0);
+    };
+    const markError = entry => {
+      if (!entry) return;
+      if (activeProbe && activeProbe.entry === entry) cleanActiveProbe();
+      removeQueued(entry);
+      if (entry.state === 'ready') readyCount = Math.max(0, readyCount - 1);
+      setEntryState(entry, 'error');
+      if (!unlocked) startupFailures += 1;
+      if (entry.requested) {
+        announce(`“${entry.title}” could not load. Select it to retry.`);
+        entry.requested = false;
+      }
+      if (foregroundEntry === entry) {
+        clearTimeout(foregroundTimer);
+        foregroundTimer = 0;
+        foregroundEntry = null;
+        pausedForForeground = false;
+      }
+      updateBootProgress();
+      if (!unlocked && ((readyCount === 0 && startupFailures >= 6) || startupFailures >= 12)) {
+        clearTimeout(startupWatchdog);
+        startupWatchdog = 0;
+        queue = [];
+        if (boot) boot.fail('The first audio demos are not available yet.', 'Check your connection, then reload the page to try again.');
+        return;
+      }
+      window.setTimeout(pump, 0);
+    };
+    const entryFor = (element, url) => byElement.get(element) || byUrl.get(normaliseUrl(url));
+    const foreground = (element, url) => {
+      const entry = entryFor(element, url);
+      if (!entry) return null;
+      clearTimeout(foregroundTimer);
+      foregroundTimer = 0;
+      if (foregroundEntry && foregroundEntry !== entry) {
+        if (foregroundEntry.state === 'loading') {
+          setEntryState(foregroundEntry, 'queued');
+          enqueue(foregroundEntry, true);
+        }
+        foregroundEntry = null;
+        pausedForForeground = false;
+      }
+      if (entry.state === 'ready') {
+        foregroundEntry = null;
+        pausedForForeground = false;
+        window.setTimeout(pump, 0);
+        return entry;
+      }
+      pausedForForeground = true;
+      foregroundEntry = entry;
+      if (activeProbe) cancelProbe({requeue:activeProbe.entry !== entry, front:true});
+      removeQueued(entry);
+      if (entry.state !== 'ready') {
+        entry.requested = true;
+        setEntryState(entry, 'loading');
+        announce(`Loading “${entry.title}” now…`);
+        foregroundTimer = window.setTimeout(() => {
+          if (foregroundEntry !== entry || entry.state === 'ready' || entry.state === 'error') return;
+          setEntryState(entry, 'queued');
+          enqueue(entry, true);
+          foregroundEntry = null;
+          pausedForForeground = false;
+          pump();
+        }, PROBE_TIMEOUT_MS);
+      } else {
+        foregroundEntry = null;
+        pausedForForeground = false;
+      }
+      return entry;
+    };
+    const markReadyUrl = url => markReady(byUrl.get(normaliseUrl(url)));
+    const markErrorUrl = url => markError(byUrl.get(normaliseUrl(url)));
+    const releaseForeground = (url, {requeue = false} = {}) => {
+      const entry = byUrl.get(normaliseUrl(url)) || foregroundEntry;
+      if (!foregroundEntry || (entry && foregroundEntry !== entry)) return;
+      clearTimeout(foregroundTimer);
+      foregroundTimer = 0;
+      if (requeue && foregroundEntry.state !== 'ready' && foregroundEntry.state !== 'error') {
+        setEntryState(foregroundEntry, 'queued');
+        enqueue(foregroundEntry, true);
+      }
+      foregroundEntry = null;
+      pausedForForeground = false;
+      window.setTimeout(pump, 0);
+    };
+    entries.forEach(entry => setEntryState(entry, entry.audioUrl ? 'queued' : 'error'));
+    if (validEntries.length < 3) {
+      if (boot) boot.fail('The audio demo list is incomplete.', 'Reload the page to try again.');
+    } else {
+      updateBootProgress();
+      armStartupWatchdog();
+      pump();
+    }
+    addEventListener('offline', () => {
+      clearTimeout(startupWatchdog);
+      startupWatchdog = 0;
+      if (activeProbe) cancelProbe({requeue:true, front:true});
+      if (!unlocked && boot && typeof boot.waiting === 'function') boot.waiting('Waiting for a network connection…');
+    });
+    addEventListener('online', () => {
+      updateBootProgress();
+      armStartupWatchdog();
+      pump();
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (unlocked && document.hidden && activeProbe) cancelProbe({requeue:true, front:true});
+      else if (!document.hidden) pump();
+    });
+    return {
+      foreground,
+      markReadyUrl,
+      markErrorUrl,
+      releaseForeground,
+      snapshot:() => ({total:entries.length, ready:readyCount, queued:queue.length, loading:activeProbe ? 1 : 0, unlocked})
+    };
   };
   const eventIsCurrent = event => {
     if (event && event.currentTarget && event.currentTarget !== audio) return false;
@@ -3262,6 +3625,7 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
     const next = tracks.get(id);
     const nextWave = waves.get(id);
     if (!next || !nextWave) return;
+    if (demoReadiness) demoReadiness.foreground(card, next.audio_url);
     invalidatePlayIntent();
     token += 1;
     pairToken += 1;
@@ -3328,6 +3692,7 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
     const nextPair = pairNode ? coverPairs.get(pairNode.dataset.pair) : null;
     const role = member.dataset.role;
     if (!nextPair || (role !== 'original' && role !== 'cover') || !nextPair[role]) return;
+    if (demoReadiness) demoReadiness.foreground(member, nextPair[role].audio_url);
     invalidatePlayIntent();
     token += 1;
     pairToken += 1;
@@ -3385,6 +3750,7 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
       currentMode !== 'cover'
       || !currentPair
       || (role !== 'original' && role !== 'cover')
+      || !currentPair[role]
       || role === currentRole
       || state === states.CLOSING
       || state === states.CLOSED
@@ -3411,6 +3777,7 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
     activeDuration = current.duration_ms / 1000;
     currentWave = null;
     currentCard = pairNode ? pairNode.querySelector(`.cover-member[data-role="${role}"]`) : currentCard;
+    if (demoReadiness) demoReadiness.foreground(currentCard, current.audio_url);
     setCurrentMarker(currentCard);
     heights = new Float32Array(30);
     dialog.classList.remove('is-playing');
@@ -3454,6 +3821,7 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
   };
   const closePlayer = () => {
     if (!dialog.open || state === states.CLOSING) return;
+    const closingAudioUrl = current && current.audio_url;
     invalidatePlayIntent();
     audio.pause();
     stopAnimation();
@@ -3467,6 +3835,7 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
     variantEpoch += 1;
     position = {original:0, cover:0};
     endedPosition = {original:false, cover:false};
+    if (demoReadiness && closingAudioUrl) demoReadiness.releaseForeground(closingAudioUrl, {requeue:true});
     audio.removeAttribute('src');
     clearAudioIdentity(audio);
     audio.load();
@@ -3527,6 +3896,10 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
   dialog.addEventListener('click', event => { if (event.target === dialog) closePlayer(); });
   dialog.addEventListener('cancel', event => { event.preventDefault(); closePlayer(); });
   bindAudioEvents = target => {
+    target.addEventListener('canplay', event => {
+      if (!eventIsCurrent(event) || !current || state === states.CLOSING || state === states.CLOSED) return;
+      if (demoReadiness) demoReadiness.markReadyUrl(current.audio_url);
+    });
     target.addEventListener('loadedmetadata', event => {
       if (!eventIsCurrent(event)) return;
       if (currentMode === 'cover' && Number.isFinite(audio.duration) && audio.duration > 0) {
@@ -3559,6 +3932,7 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
       if (!eventIsCurrent(event) || state === states.CLOSING || state === states.CLOSED) return;
       if (audio.paused) return;
       if (hasCancelledPlayFor(target)) { correctivePause(audio); return; }
+      if (demoReadiness && current) demoReadiness.markReadyUrl(current.audio_url);
       if (!desiredPlaying) {
         desiredPlaying = true;
         playEpoch += 1;
@@ -3598,6 +3972,7 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
     target.addEventListener('waiting', event => { if (eventIsCurrent(event) && state === states.PLAYING) statusText.textContent = 'Buffering…'; });
     target.addEventListener('error', event => {
       if (!eventIsCurrent(event) || state === states.CLOSING || state === states.CLOSED || state === states.ENDED) return;
+      if (demoReadiness && current) demoReadiness.markErrorUrl(current.audio_url);
       invalidatePlayIntent();
       if (!audio.paused) correctivePause(audio);
       setState(states.ERROR);
@@ -3737,8 +4112,14 @@ html.player-ready .player-boot-overlay{visibility:hidden;opacity:0;pointer-event
   if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', motionChanged);
   else reduceMotion.addListener(motionChanged);
   if (window.__musicPageBoot) {
-    if (typeof dialog.showModal === 'function' && typeof dialog.close === 'function') window.__musicPageBoot.ready();
-    else window.__musicPageBoot.fail();
+    if (typeof dialog.showModal === 'function' && typeof dialog.close === 'function' && typeof Audio === 'function') {
+      try {
+        demoReadiness = createDemoReadiness();
+        window.__demoReadiness = demoReadiness;
+      } catch (error) {
+        window.__musicPageBoot.fail();
+      }
+    } else window.__musicPageBoot.fail();
   }
 })();
 </script>
